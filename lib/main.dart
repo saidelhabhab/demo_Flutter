@@ -10,7 +10,47 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: MyHomePage(),
+      home: SplashScreen(),
+    );
+  }
+}
+
+class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // Use a Future to navigate after a delay
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const MyHomePage()),
+      );
+    });
+
+    return Scaffold(
+      body: Center(
+        child: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            // Large orange square
+            Container(
+              width: 100,
+              height: 100,
+              color: Colors.orange,
+            ),
+            // Small white square positioned at the bottom center
+            Positioned(
+              bottom: 10,
+              child: Container(
+                width: 60,
+                height: 10,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -51,8 +91,32 @@ class _MyHomePageState extends State<MyHomePage> {
           'Home',
           style: TextStyle(color: Colors.blue),
         ),
-        actions: const [
-          IconButton(
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              // Handle Sign In action
+              print('Sign In pressed');
+            },
+            child: const Text(
+              'Sign In',
+              style: TextStyle(color: Colors.blue), // Change text color to white
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              // Navigate to Sign Up page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SignUpPage()),
+              );
+            },
+            child: const Text(
+              'Sign Up',
+              style: TextStyle(color: Colors.blue), // Change text color to white
+            ),
+          ),
+          const SizedBox(width: 10), // Add some space between buttons
+          const IconButton(
             icon: Icon(Icons.search),
             tooltip: 'Search',
             onPressed: null,
@@ -176,6 +240,7 @@ class SecondPage extends StatelessWidget {
             // First Column
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 // Stack for the squares
                 Stack(
@@ -234,6 +299,74 @@ class SecondPage extends StatelessWidget {
         ),
       ),
       backgroundColor: Colors.black,
+    );
+  }
+}
+
+class SignUpPage extends StatelessWidget {
+  const SignUpPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // Create controllers for the text fields
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Sign Up'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                labelText: 'Name',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16.0), // Space between fields
+            TextField(
+              controller: emailController,
+              decoration: const InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.emailAddress,
+            ),
+            const SizedBox(height: 16.0), // Space between fields
+            TextField(
+              controller: passwordController,
+              decoration: const InputDecoration(
+                labelText: 'Password',
+                border: OutlineInputBorder(),
+              ),
+              obscureText: true, // Hide password input
+            ),
+            const SizedBox(height: 20.0), // Space before button
+            ElevatedButton(
+              onPressed: () {
+                // Handle sign-up logic here
+                String name = nameController.text;
+                String email = emailController.text;
+                String password = passwordController.text;
+
+                // For demonstration, just print the values
+                print('Name: $name');
+                print('Email: $email');
+                print('Password: $password');
+
+                // You can add your sign-up logic here (e.g., API call)
+              },
+              child: const Text('Sign Up'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
